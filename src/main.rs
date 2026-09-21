@@ -4,7 +4,7 @@ use gtk4_layer_shell::{Layer, LayerShell};
 
 fn main() {
     let app = Application::builder()
-        .application_id("com.custom.MaterialShell")
+        .application_id("no.johron.Rabbagast")
         .build();
 
     app.connect_activate(|app| {
