@@ -24,6 +24,7 @@
           buildInputs = with pkgs; [
             glib
             gtk4
+            libadwaita
             gtk4-layer-shell
             pango
             gdk-pixbuf
