@@ -47,7 +47,10 @@ pub fn render_bar(app: &AdwApplication, model: &Model) {
 }
 
 fn render_workspaces(model: &Model, container: &Box) {
-    for ws in model.workspaces.clone() {
+    let mut workspaces = model.workspaces.clone();
+    workspaces.sort();
+
+    for ws in workspaces {
         let label = Label::new(Some(&ws.to_string()));
         container.append(&label);
     }

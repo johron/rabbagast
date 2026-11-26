@@ -1,3 +1,5 @@
+use std::env;
+
 use adw::Application as AdwApplication;
 use gtk4::glib;
 use gtk4::prelude::*;
@@ -18,13 +20,28 @@ fn main() -> glib::ExitCode {
 
     app.connect_activate(move |app| {
         // for now just assume hyprland
-        let mut window_manager = WMHyprland::new();
-        let mut model = Model::new();
+        // let mut window_manager = WMHyprland::new();
 
-        window_manager.update();
-        window_manager.populate(&mut model);
+        let mut window_manager: Option<Box<dyn WindowManager>> =
+            match env::var("XDG_CURRENT_DESKTOP") {
+                Ok(val) => match val.to_lowercase().as_str() {
+                    "hyprland" => Some(Box::new(WMHyprland::new())),
+                    // "sway" => WMSway::new(),
+                    _ => None,
+                },
+                Err(e) => None,
+            };
 
-        render_bar(app, &model);
+        if let Some(window_manager) = &mut window_manager {
+            let mut model = Model::new();
+
+            window_manager.update();
+            window_manager.populate(&mut model);
+
+            render_bar(app, &model);
+        } else {
+            panic!("Unsupported desktop")
+        }
     });
 
     app.run()
